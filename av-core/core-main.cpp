@@ -18,7 +18,7 @@ int main () {
     CorePhysical    physical    (&context, &tx_buffer, &rx_buffer);
 
     context.register_module(
-        "CAM",
+        "AV CAM",
         PATH_CAMERA__module_output,
         PATH_CAMERA__module_input,
         PATH_CAMERA__logger

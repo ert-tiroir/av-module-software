@@ -64,7 +64,10 @@ int main () {
             int to_displace  = offset % DATA_SIZE;
             int size_to_send = offset - to_displace;
 
-            target.write_to_core(buffer, size_to_send);
+            std::string str(size_to_send, '*');
+            for (int i = 0; i < size_to_send; i ++) str[i] = buffer[i];
+
+            target.write_string_to_core(str);
             logger << "Sent buffer of size " << size_to_send << " to radio" << LogLevel::INFO;
             for (int i = 0; i < to_displace; i ++)
                 buffer[i] = buffer[i + size_to_send];
