@@ -85,6 +85,7 @@ int main () {
             }
             cameraSoftware = openCameraSoftware();
             offset = 0;
+            logger << "Successfully opened software\n" << LogLevel::SUCCESS;
         } else if (command == "STOP") {
             if (cameraSoftware == nullptr) {
                 logger << "Cannot stop camera software if there are no running" << LogLevel::ERROR;
@@ -93,6 +94,7 @@ int main () {
             pclose(cameraSoftware);
             cameraSoftware = nullptr;
             offset = 0;
+            logger << "Successfully closed software\n" << LogLevel::SUCCESS;
         }
     }
 }
