@@ -23,6 +23,12 @@ int main () {
         PATH_CAMERA__module_input,
         PATH_CAMERA__logger
     );
+    context.register_module(
+        "AV SEN",
+        "/tmp/sensors-module-output",
+        "/tmp/sensors-module-input",
+        "/tmp/sensors-logger"
+    );
 
     pthread_t logger_id = logger     .start();
     pthread_t transc_id = transceiver.start();
