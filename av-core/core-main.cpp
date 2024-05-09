@@ -8,6 +8,15 @@ const char* PATH_CAMERA__module_output = "/tmp/camera-module-output";
 const char* PATH_CAMERA__module_input  = "/tmp/camera-module-input";
 const char* PATH_CAMERA__logger        = "/tmp/camera-module-logger";
 
+void set_priority (pthread_t id, int prio) {
+    sched_param sch;
+    int policy;
+    pthread_getschedparam(id, &policy, &sch);
+
+    sch.sched_priority = prio;
+    pthread_setschedparam(id, SCHED_FIFO, &sch);
+}
+
 int main () {
     buffer_t tx_buffer = create_buffer(1024, 1024, tx_char_buffer);
     buffer_t rx_buffer = create_buffer(1024, 1024, rx_char_buffer);
@@ -24,9 +33,9 @@ int main () {
         PATH_CAMERA__logger
     );
 
-    pthread_t logger_id = logger     .start();
-    pthread_t transc_id = transceiver.start();
-    pthread_t physic_id = physical   .start();
+    pthread_t logger_id = logger     .start(); set_priority(logger_id, 98);
+    pthread_t transc_id = transceiver.start(); set_priority(transc_id, 99);
+    pthread_t physic_id = physical   .start(); set_priority(physic_id, 99);
 
     void* result;
     pthread_join(logger_id, &result);
