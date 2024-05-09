@@ -73,6 +73,8 @@ int main () {
             for (int i = 0; i < size_to_send; i ++) str[i] = buffer[i];
 
             target.write_string_to_core(str);
+
+            fwrite( buffer, 1, size_to_send, cameraResult );
             logger << "Sent buffer of size " << size_to_send << " to radio" << LogLevel::INFO;
             for (int i = 0; i < to_displace; i ++)
                 buffer[i] = buffer[i + size_to_send];
