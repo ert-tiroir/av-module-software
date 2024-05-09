@@ -46,6 +46,8 @@ int main () {
 
     FILE* cameraSoftware = nullptr;
 
+    logger << "Succesfully opened Camera Module" << LogLevel::SUCCESS;
+
     while ( 1 ) {
         if (cameraSoftware != nullptr) {
             int rem = SIZE - offset;
