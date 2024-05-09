@@ -11,6 +11,8 @@ const char* PATH_CAMERA__logger        = "/tmp/camera-module-logger";
 
 const char* CAMERA_command = "libcamera-vid -t 0 -o - --width 720 --height 480 --bitrate 1000000";
 
+const char* CAMERA_result_file = "AV_Camera_Result";
+
 FILE* openCameraSoftware () {
     FILE* software = popen(CAMERA_command, "r");
 
@@ -45,6 +47,7 @@ int main () {
     ModuleLogger logger (&target);
 
     FILE* cameraSoftware = nullptr;
+    FILE* cameraResult   = nullptr;
 
     logger << "Succesfully opened Camera Module" << LogLevel::SUCCESS;
 
@@ -54,7 +57,9 @@ int main () {
             int res = readFromSoftware(cameraSoftware, buffer, rem);
             if (res < 0) {
                 pclose(cameraSoftware);
+                fclose(cameraResult);
                 cameraSoftware = nullptr;
+                cameraResult   = nullptr;
                 logger << "Unexpected close from camera software" << LogLevel::ERROR;
                 continue ;
             }
@@ -84,6 +89,7 @@ int main () {
                 continue ;
             }
             cameraSoftware = openCameraSoftware();
+            cameraResult   = fopen(CAMERA_result_file, "w");
             offset = 0;
             logger << "Successfully opened software\n" << LogLevel::SUCCESS;
         } else if (command == "STOP") {
@@ -92,7 +98,9 @@ int main () {
                 continue ;
             }
             pclose(cameraSoftware);
+            fclose(cameraResult);
             cameraSoftware = nullptr;
+            cameraResult   = nullptr;
             offset = 0;
             logger << "Successfully closed software\n" << LogLevel::SUCCESS;
         }
