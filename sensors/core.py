@@ -66,7 +66,7 @@ def read_string (fd):
     
 
 def write_string (fd, str):
-    buffer = bytes([0, 0, 0, 0])
+    buffer = [0, 0, 0, 0]
     size = len(str)
     if(size>=HANDSHAKE):
         size+=1
@@ -75,7 +75,7 @@ def write_string (fd, str):
     buffer[2]=(size // (256 ** 2)) % 256
     buffer[3]=(size // (256 ** 3)) % 256
     
-    write_all(fd, buffer)
+    write_all(fd, bytes(buffer))
     write_all(fd, str)
 
     return True
