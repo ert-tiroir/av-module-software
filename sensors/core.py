@@ -33,7 +33,7 @@ def write_all (fd, buffer):
     size = len(buffer)
 
     while offset != size:
-        res = len(os.write(fd, buffer[offset:]))
+        res = os.write(fd, buffer[offset:])
         if res < 0:
              return res
 
