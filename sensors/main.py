@@ -2,8 +2,8 @@ import time
 import board
 from adafruit_dps310.basic import DPS310
 
-from sensors.core import CoreTarget
-from sensors.logger import ModuleLogger, INFO
+from core import CoreTarget
+from logger import ModuleLogger, SUCCESS, INFO
 
 i2c = board.I2C()   # uses board.SCL and board.SDA
 
@@ -15,6 +15,8 @@ target = CoreTarget(
     "/tmp/sensors-logger"
 )
 logger = ModuleLogger(target)
+
+logger.print(SUCCESS, "Succesfully started AV-Sensors")
 
 while True:
     logger.print(INFO, "Temperature = %.2f *C"%dps310.temperature)

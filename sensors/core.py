@@ -92,7 +92,7 @@ class CoreTarget:
             return
     
 
-        buffer = bytes([42] * 4)
+        buffer = bytes([0x42] * 4)
 
         write_all(self.fd_module_output, buffer)
     
