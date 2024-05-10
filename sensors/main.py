@@ -21,6 +21,7 @@ logger.print(SUCCESS, "Succesfully started AV-Sensors")
 try:
     dps310 = DPS310(i2c)
 except Exception:
+    dps310 = None
     logger.print(ERROR, "Could not start DPS310")
 
 lastDPS310_WARNING = 0
@@ -35,9 +36,6 @@ def write_to_buffer (bytes):
     buffer += bytes
 
 while True:
-    logger.print(INFO, "Temperature = %.2f *C"%dps310.temperature)
-    logger.print(INFO, "Pressure = %.2f hPa"%dps310.pressure)
-    
     found, command = target.read_string_from_core()
     if found:
         if command == b"START": 
@@ -50,6 +48,9 @@ while True:
     if not running: continue
 
     try:
+        logger.print(INFO, "Temperature = %.2f *C"%dps310.temperature)
+        logger.print(INFO, "Pressure = %.2f hPa"%dps310.pressure)
+        logger.print(INFO, "Altitude = %.2f m"%dps310.altitude)
         write_to_buffer(
             bytes(
                 [1]
