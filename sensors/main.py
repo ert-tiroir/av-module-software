@@ -25,7 +25,8 @@ except Exception:
 
 lastDPS310_WARNING = 0
 
-buffer = b""
+buffer  = b""
+running = False
 
 def write_to_buffer (bytes):
     if len(buffer) + len(bytes) > 1016:
@@ -37,6 +38,17 @@ while True:
     logger.print(INFO, "Temperature = %.2f *C"%dps310.temperature)
     logger.print(INFO, "Pressure = %.2f hPa"%dps310.pressure)
     
+    found, command = target.read_string_from_core()
+    if found:
+        if command == b"START": 
+            running = True
+            logger.print(SUCCESS, "Successfully started sensors")
+        else:
+            runnning = False
+            logger.print(SUCCESS, "Successfully stopped sensors")
+
+    if not running: continue
+
     try:
         write_to_buffer(
             bytes(
