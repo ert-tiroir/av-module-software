@@ -4,14 +4,23 @@
 #include <unistd.h>
 
 import os
+import errno
 
 HANDSHAKE = 0x42424242
+
+def safe_read (fd, size):
+    try:
+        return os.read(fd, size)
+    except OSError as exc:
+        if exc.errno == errno.EAGAIN:
+            return ""
+        raise exc
 
 def read_all (fd, size): 
     offset = 0
     S = []
     while offset != size: 
-        str = os.read(fd, size - offset)
+        str = safe_read(fd, size - offset)
         res = len(str)
         if res <= 0: 
             continue
@@ -21,7 +30,7 @@ def read_all (fd, size):
     return b"".join(S)
 
 def read_all_or_nothing (fd, size):
-    string = os.read(fd, size)
+    string = safe_read(fd, size)
     if len(string) == 0:
          return b""
 
@@ -132,10 +141,10 @@ class CoreTarget:
         return os.write(self.fd_module_output, buffer)
     
 
-    def read_from_core (self, buffer):
+    def read_from_core (self, size):
         if not self.ready():
             return 0
-        return os.read(self.fd_module_input, buffer)
+        return safe_read(self.fd_module_input, size)
     
 
     def write_string_to_core (self, buffer):
