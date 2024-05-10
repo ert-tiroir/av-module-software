@@ -52,7 +52,7 @@ while True:
             running = True
             logger.print(SUCCESS, "Successfully started sensors")
         else:
-            runnning = False
+            running = False
             logger.print(SUCCESS, "Successfully stopped sensors")
 
     if not running: continue
